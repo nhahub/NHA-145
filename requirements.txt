@@ -2,7 +2,7 @@
 streamlit
 plotly
 matplotlib
-
+protobuf==3.20.3
 # --- Core ML & DL ---
 tensorflow
 torch>=1.13.1
@@ -33,3 +33,4 @@ mlflow
 
 # --- Testing ---
 requests
+
