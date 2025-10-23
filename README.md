@@ -86,7 +86,7 @@ The main challenge was handling **large model sizes**, **environment mismatches*
 
 ---
 
-👨‍💻 **Developer:** [Nour Ahmed](https://github.com/NOUR-wq277)  
-📦 **Main Repo:** [Cattolingo-Project](https://github.com/NOUR-wq277/Cattolingo-Project)
+👨‍💻 **Developers:**  
+
 
 
