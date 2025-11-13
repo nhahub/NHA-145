@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual Environment
+venv/
+venv_catto/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Models (سيتم mount من الخارج)
+models/
+*.h5
+*.pth
+*.safetensors
+
+# Cache
+cache/
+.cache/
+*.log
+
+# Testing
+test_*.py
+*_test.py
+.pytest_cache/
+
+# Documentation
+README.md
+*.md
+
+# Other
+uploads/
+temp/
+tmp/
