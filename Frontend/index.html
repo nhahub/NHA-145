@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catto-Lingo - Cat Emotion Detection</title>
+    
+    <!-- Tailwind CSS من CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Google Fonts - Cairo للعربي -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .emotion-badge {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-link.active {
+            border-bottom-color: #667eea;
+            color: #667eea;
+        }
+
+        .nav-link:hover {
+            color: #667eea;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <i class="fas fa-cat text-3xl"></i>
+                    <h1 class="text-2xl font-bold">Catto-Lingo</h1>
+                </div>
+                <div id="navMenu" class="hidden md:flex space-x-6 space-x-reverse">
+                    <a href="#" class="nav-link" onclick="showPage('login')">تسجيل الدخول</a>
+                    <a href="#" class="nav-link" onclick="showPage('register')">حساب جديد</a>
+                </div>
+                <div id="userMenu" class="hidden md:flex items-center space-x-4 space-x-reverse">
+                    <span id="userName" class="font-semibold"></span>
+                    <button onclick="logout()" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition">
+                        <i class="fas fa-sign-out-alt ml-2"></i> تسجيل الخروج
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container mx-auto px-6 py-8">
+        <!-- Login Page -->
+        <div id="loginPage" class="hidden fade-in">
+            <div class="max-w-md mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
+                <div class="gradient-bg p-6 text-white text-center">
+                    <i class="fas fa-cat text-6xl mb-4"></i>
+                    <h2 class="text-3xl font-bold">تسجيل الدخول</h2>
+                    <p class="mt-2">مرحباً بك في Catto-Lingo</p>
+                </div>
+                <div class="p-8">
+                    <form onsubmit="handleLogin(event)" class="space-y-6">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">
+                                <i class="fas fa-user ml-2"></i> اسم المستخدم
+                            </label>
+                            <input type="text" id="loginUsername" required
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">
+                                <i class="fas fa-lock ml-2"></i> كلمة المرور
+                            </label>
+                            <input type="password" id="loginPassword" required
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition">
+                        </div>
+                        <button type="submit" 
+                                class="w-full gradient-bg text-white py-3 rounded-lg font-bold hover:opacity-90 transition">
+                            <i class="fas fa-sign-in-alt ml-2"></i> دخول
+                        </button>
+                    </form>
+                    <div class="mt-6 text-center">
+                        <a href="#" onclick="showPage('register')" class="text-purple-600 hover:text-purple-800">
+                            ليس لديك حساب؟ سجل الآن
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Page -->
+        <div id="registerPage" class="hidden fade-in">
+            <div class="max-w-md mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
+                <div class="gradient-bg p-6 text-white text-center">
+                    <i class="fas fa-user-plus text-6xl mb-4"></i>
+                    <h2 class="text-3xl font-bold">إنشاء حساب جديد</h2>
+                    <p class="mt-2">انضم إلى Catto-Lingo الآن</p>
+                </div>
+                <div class="p-8">
+                    <form onsubmit="handleRegister(event)" class="space-y-6">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">
+                                <i class="fas fa-user ml-2"></i> اسم المستخدم
+                            </label>
+                            <input type="text" id="registerUsername" required
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">
+                                <i class="fas fa-envelope ml-2"></i> البريد الإلكتروني
+                            </label>
+                            <input type="email" id="registerEmail" required
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2">
+                                <i class="fas fa-lock ml-2"></i> كلمة المرور
+                            </label>
+                            <input type="password" id="registerPassword" required
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition">
+                        </div>
+                        <button type="submit" 
+                                class="w-full gradient-bg text-white py-3 rounded-lg font-bold hover:opacity-90 transition">
+                            <i class="fas fa-user-plus ml-2"></i> تسجيل
+                        </button>
+                    </form>
+                    <div class="mt-6 text-center">
+                        <a href="#" onclick="showPage('login')" class="text-purple-600 hover:text-purple-800">
+                            لديك حساب بالفعل؟ سجل دخولك
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboardPage" class="hidden fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-paw text-purple-600 ml-2"></i>
+                    لوحة التحكم
+                </h2>
+                <p class="text-gray-600 text-lg">اختر نوع التحليل الذي تريده</p>
+            </div>
+
+            <!-- Prediction Type Cards -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                <!-- Text Analysis -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover cursor-pointer" onclick="showPredictionForm('text')">
+                    <div class="text-center">
+                        <div class="bg-blue-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-comment-dots text-4xl text-blue-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">تحليل النص</h3>
+                        <p class="text-gray-600">حلل مشاعر قطتك من النص</p>
+                    </div>
+                </div>
+
+                <!-- Audio Analysis -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover cursor-pointer" onclick="showPredictionForm('audio')">
+                    <div class="text-center">
+                        <div class="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-microphone text-4xl text-green-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">تحليل الصوت</h3>
+                        <p class="text-gray-600">استمع لمواء قطتك</p>
+                    </div>
+                </div>
+
+                <!-- Image Analysis -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover cursor-pointer" onclick="showPredictionForm('image')">
+                    <div class="text-center">
+                        <div class="bg-yellow-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-image text-4xl text-yellow-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">تحليل الصورة</h3>
+                        <p class="text-gray-600">حلل صورة قطتك</p>
+                    </div>
+                </div>
+
+                <!-- Video Analysis -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover cursor-pointer" onclick="showPredictionForm('video')">
+                    <div class="text-center">
+                        <div class="bg-red-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-video text-4xl text-red-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">تحليل الفيديو</h3>
+                        <p class="text-gray-600">حلل فيديو قطتك</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prediction Form Container -->
+            <div id="predictionFormContainer" class="hidden">
+                <!-- Forms will be dynamically loaded here -->
+            </div>
+
+            <!-- Results Container -->
+            <div id="resultsContainer" class="hidden">
+                <!-- Results will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 text-center">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <p class="text-gray-700 font-semibold">جاري التحليل...</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
