@@ -41,7 +41,7 @@ Before system integration, each modality was developed, trained, and deployed in
 | Component | Technology Stack | Status | Access Link |
 | :--- | :--- | :---: | :--- |
 | **🌐 Web Application** | **Frontend:** HTML5, CSS3, JS (Netlify) | ✅ Live | [**🚀 Launch Catto-Lingo**](https://brilliant-starburst-694b2f.netlify.app/) |
-| **🧠 Backend API** | **Backend:** FastAPI, Docker (HF Spaces) | ✅ Live | [**📄 API Documentation**](https://nour87-cattolingo-backend.hf.space/docs) |
+| **🧠 Backend API** | **Backend:** FastAPI, Docker (HF Spaces) | ✅ Live | [**📄 API Documentation**](https://huggingface.co/spaces/Nour87/cattolingo-api/tree/main) |
 | **🗄️ Database** | **DB:** PostgreSQL (Supabase) | ✅ Active | *Cloud Connected* |
 
 
@@ -104,5 +104,6 @@ This project was brought to life by the dedicated efforts of:
 * **Ziad Sakr**
 * **Abdalrhman Ibrahim**
 * **Belal Mahmoud**
+
 
 ---
